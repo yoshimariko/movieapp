@@ -10,6 +10,14 @@ const Button: ComponentStyleConfig = {
       _hover: {
         backgroundColor: 'secondary.50',
       }
+    },
+    outline: {
+      borderColor: 'secondary.500',
+      color: 'secondary.500',
+      _hover: {
+        backgroundColor: 'secondary.500',
+        color: '#FFFFFF'
+      }
     }
   }
 };
@@ -37,28 +45,6 @@ const Link: ComponentStyleConfig = {
     _hover: {
       textDecoration: 'none'
     }
-  },
-  variants: {
-    favoriteOff: {
-      display: 'flex',
-      position: 'absolute',
-      top: '12px',
-      right: '4px',
-      color: 'gray.500',
-      backgroundColor: 'blackAlpha.600',
-      borderRadius: '50px',
-      padding: '5px'
-    },
-    favoriteOn: {
-      display: 'flex',
-      position: 'absolute',
-      top: '12px',
-      right: '4px',
-      color: 'secondary.500',
-      backgroundColor: 'blackAlpha.600',
-      borderRadius: '50px',
-      padding: '5px'
-    }
   }
 }
 
@@ -75,7 +61,7 @@ export const theme = extendTheme({
     }
   },
   fonts: {
-    body: 'Noto Sans JP, system-ui, sans-serif'
+    body: 'Raleway, system-ui, sans-serif'
   },
   colors: {
     primary: {
