@@ -44,6 +44,9 @@ const Link: ComponentStyleConfig = {
   baseStyle: {
     _hover: {
       textDecoration: 'none'
+    },
+    _focus: {
+      boxShadow: 'none'
     }
   }
 }
@@ -73,7 +76,8 @@ export const theme = extendTheme({
       500: '#E4A043'
     },
     tertiary: {
-      500: '#04293A'
+      500: '#04293A',
+      700: '#042939'
     }
   },
   components: {

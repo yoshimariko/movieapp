@@ -1,14 +1,23 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Stack,
   HStack,
   Input,
   Button,
   Divider,
-  Text
+  Text,
+  Link,
+  Icon,
+  useDisclosure
 } from '@chakra-ui/react';
+import { GoHome, GoHeart } from 'react-icons/go';
+
+import Favorites from '../components/Favorites';
 
 const Header: React.FC = () => {
+  const { isOpen, onToggle } = useDisclosure();
+
   return (
     <>
       <Stack
@@ -25,14 +34,37 @@ const Header: React.FC = () => {
           alignSelf="center"
           m="0"
         >
-          MY MOVIES
+          MOVIECollect
         </Text>
-        <HStack spacing="10px" w={['100%', '100%', '40%']}>
-          <Input type="text" size={['md', 'lg', 'lg']} />
-          <Button size={['md', 'lg', 'lg']}>Search</Button>
-        </HStack>
+        <Stack
+          direction={['column-reverse', 'row', 'row']}
+          justifyContent={['center', 'center', 'end']}
+          w={['100%', '100%', '50%']}
+          spacing={['35px', '20px', '20px']}
+        >
+          <HStack>
+            <Input type="text" size={['md', 'lg', 'lg']} />
+            <Button size={['md', 'lg', 'lg']}>Search</Button>
+          </HStack>
+          <HStack
+            justifyContent={['center', 'center', 'initial']}
+            spacing="20px"
+            h="50px"
+          >
+            <Divider orientation="vertical" borderColor="gray.600" />
+              <RouterLink to="/">
+                <Icon as={GoHome} color="secondary.500" fontSize="2xl" />
+              </RouterLink>
+            <Divider orientation="vertical" borderColor="gray.600" />
+              <Link href="#" onClick={onToggle} display="flex">
+                <Icon as={GoHeart} color="secondary.500" fontSize="2xl" />
+              </Link>
+            <Divider orientation="vertical" borderColor="gray.600" />
+          </HStack>
+        </Stack>
       </Stack>
       <Divider />
+      <Favorites onToggle={onToggle} isOpen={isOpen} />
     </>
   )
 };
