@@ -7,7 +7,7 @@ import {
   Text,
   Image,
   LinkBox,
-  LinkOverlay,
+  LinkOverlay
 } from '@chakra-ui/react';
 
 import { favoritesAtom } from '../recoil/atom';
@@ -43,9 +43,8 @@ const MovieItem: React.FC<MovieItemType> = ({
             borderRadius="lg"
             transition="transform .2s"
             mb="15px"
-            _groupHover = {{ transform: "scale(1.02)", borderTopRadius: "lg" }}
-          >
-          </Image>
+            _groupHover={{ transform: 'scale(1.02)', borderTopRadius: 'lg' }}
+          ></Image>
           <FavoriteButton
             movideId={id}
             isActive={favorites.includes(id.toString())}
@@ -58,16 +57,13 @@ const MovieItem: React.FC<MovieItemType> = ({
             onItemClick && onItemClick();
           }}
         ></LinkOverlay>
-        <Stack
-          spacing={0}
-          _groupHover={{ color: "secondary.500" }}
-        >
+        <Stack spacing={0} _groupHover={{ color: 'secondary.500' }}>
           <Text
             fontSize="large"
             fontWeight="bold"
             display="-webkit-box"
             overflow="hidden"
-            style={{ WebkitLineClamp: 2, WebkitBoxOrient: 'vertical'}}
+            style={{ WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}
           >
             {title}
           </Text>
@@ -79,10 +75,12 @@ const MovieItem: React.FC<MovieItemType> = ({
           <Text
             fontSize="xs"
             color="gray.300"
-            _groupHover={{ color: "secondary.500" }}
+            _groupHover={{ color: 'secondary.500' }}
           >
             {genre.map((item, ind) => {
-              return (genre.length > 1) && ind !== (genre.length - 1) ? `${item}, ` : item
+              return genre.length > 1 && ind !== genre.length - 1
+                ? `${item}, `
+                : item;
             })}
           </Text>
         </Stack>
