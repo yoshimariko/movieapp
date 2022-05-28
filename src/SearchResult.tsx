@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Stack, SimpleGrid, Text, Spinner } from '@chakra-ui/react';
 import { gql, useQuery } from '@apollo/client';
 
-import { GENRE, IMAGE_PATH } from './api';
+import { GENRE } from './api';
 
 import MovieItem from './components/MovieItem';
 
 const SearchResult: React.FC = () => {
-  const [imagePath, setimagePath] = useState<string>('');
   const [urlParams] = useSearchParams();
   const keyword = urlParams.get('term');
 
@@ -35,10 +34,6 @@ const SearchResult: React.FC = () => {
       keyword: keyword
     }
   });
-
-  useEffect(() => {
-    IMAGE_PATH.then((path: string) => setimagePath(path));
-  }, [keyword]);
 
   return (
     <>
@@ -70,25 +65,32 @@ const SearchResult: React.FC = () => {
               </Text>
             </Text>
           </Stack>
-          {data.movies.results <= 0 && <Text ps="25px">No Search Found.</Text>}
           <SimpleGrid columns={[2, 2, 4, 5]} spacing="15px">
-            {data.movies.results.map(
-              (movie: {
-                id: number;
-                poster_path: string;
-                title: string;
-                release_date: string;
-                genre_ids: Array<number>;
-              }) => (
-                <MovieItem
-                  key={`movie-${movie.id}`}
-                  id={movie.id}
-                  image={imagePath + movie.poster_path}
-                  title={movie.title}
-                  date={movie.release_date.split('-')[0]}
-                  genre={movie.genre_ids.map((id: number) => GENRE[id])}
-                />
-              )
+            {data.movies.results.length > 0 ? (
+              <>
+                {data.movies.results.map(
+                  (movie: {
+                    id: number;
+                    poster_path: string;
+                    title: string;
+                    release_date: string;
+                    genre_ids: Array<number>;
+                  }) => (
+                    <MovieItem
+                      key={`movie-${movie.id}`}
+                      id={movie.id}
+                      image={movie.poster_path}
+                      title={movie.title}
+                      date={
+                        movie.release_date && movie.release_date.split('-')[0]
+                      }
+                      genre={movie.genre_ids.map((id: number) => GENRE[id])}
+                    />
+                  )
+                )}
+              </>
+            ) : (
+              <Text ps="25px">No Search Found.</Text>
             )}
           </SimpleGrid>
         </Stack>

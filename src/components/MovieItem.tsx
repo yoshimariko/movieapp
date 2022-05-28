@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import {
@@ -10,8 +10,10 @@ import {
   LinkOverlay
 } from '@chakra-ui/react';
 
+import { IMAGE_PATH } from '../api';
 import { favoritesAtom } from '../recoil/atom';
 
+import ImagePlaceHolder from '../assets/image/placeholder.png';
 import FavoriteButton from './FavoriteButton';
 
 interface MovieItemType {
@@ -31,15 +33,20 @@ const MovieItem: React.FC<MovieItemType> = ({
   genre,
   onItemClick
 }) => {
+  const [imagePath, setimagePath] = useState<string>('');
   const [favorites] = useRecoilState(favoritesAtom);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    IMAGE_PATH.then((path: string) => setimagePath(path));
+  }, []);
 
   return (
     <Stack p="8px" role="group">
       <LinkBox p="4px" overflow="hidden">
         <Box position="relative">
           <Image
-            src={image}
+            src={image ? imagePath + image : ImagePlaceHolder}
             borderRadius="lg"
             transition="transform .2s"
             mb="15px"

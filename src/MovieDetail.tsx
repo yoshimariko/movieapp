@@ -14,8 +14,9 @@ import {
 import { BsSuitHeartFill } from 'react-icons/bs';
 
 import { favoritesAtom } from './recoil/atom';
-
 import { IMAGE_PATH } from './api';
+
+import ImagePlaceHolder from './assets/image/placeholder.png';
 
 interface MovieImageType {
   image: string;
@@ -266,7 +267,11 @@ const MovieDetails: React.FC = () => {
                   <Image
                     key={`rec-${ind}`}
                     cursor="pointer"
-                    src={imagePath + result.poster_path}
+                    src={
+                      result.poster_path
+                        ? imagePath + result.poster_path
+                        : ImagePlaceHolder
+                    }
                     width={['30%', '30%', '20%', '15%']}
                     onClick={() => navigate('/' + result.id.toString())}
                   />
