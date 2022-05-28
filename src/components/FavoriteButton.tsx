@@ -10,10 +10,11 @@ const FavoriteButton: React.FC<{ movideId: number; isActive?: boolean }> = ({
   isActive = false
 }) => {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [favorite, setFavorites] = useRecoilState(favoritesAtom);
 
   const onFavoriteClick = () => {
-    setFavorites((prev: any) => {
+    setFavorites((prev: Array<string>) => {
       if (prev.includes(movideId.toString())) {
         return prev.filter((id: string) => id !== movideId.toString());
       } else {

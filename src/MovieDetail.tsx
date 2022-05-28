@@ -36,7 +36,7 @@ const MovieImage: React.FC<MovieImageType> = ({ image, id }) => {
   const [favorites, setFavorites] = useRecoilState(favoritesAtom);
 
   const onFavoriteClick = () => {
-    setFavorites((prev: any) => {
+    setFavorites((prev: Array<string>) => {
       if (prev.includes(id)) {
         return prev.filter((favIdid: string) => favIdid !== id);
       } else {
@@ -95,8 +95,8 @@ const MovieInfo: React.FC<MovieInfoType> = ({
         {releaseDate} ({' '}
         {lang.map((item, ind) => {
           return lang.length > 1 && ind !== lang.length - 1
-              `${item.toUpperCase()} /` :
-              item.toUpperCase();
+            ? `${item.toUpperCase()} /`
+            : item.toUpperCase();
         })}{' '}
         ) ・
         {genre.map((item, ind) => {

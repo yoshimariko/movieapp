@@ -16,7 +16,7 @@ export const client = new ApolloClient({
   link: restLink
 });
 
-export const GET = (query: DocumentNode, variables?: any) => {
+export const GET = (query: DocumentNode, variables?: unknown) => {
   return client.query({ query, variables }).then((res) => res.data);
 };
 
