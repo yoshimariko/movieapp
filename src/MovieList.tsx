@@ -1,89 +1,95 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Stack,
   SimpleGrid,
-  Text
+  Text,
+  Spinner
 } from '@chakra-ui/react';
 import {
   ArrowRightIcon,
   ArrowLeftIcon
 } from '@chakra-ui/icons';
+import { gql, useQuery } from '@apollo/client';
+
+import { GENRE, IMAGE_PATH } from './api';
 
 import MovieItem from './components/MovieItem';
-import SamplePoster from './assets/image/sample.jpeg';
+
 
 const MovieList: React.FC = () => {
+  const [imagePath, setimagePath] = useState<string>('');
+  
+  const nowPlayingQuery = gql`
+    query GetNowPlaying {
+      movies @rest(type: "MovieList", path: "/movie/now_playing") {
+        results {
+          id
+          poster_path
+          title
+          genre_ids
+          release_date
+        }
+      }
+    }
+  `;
+
+  const { loading, data } = useQuery(nowPlayingQuery);
+
+  useEffect(() => {
+    IMAGE_PATH.then((path: string) => setimagePath(path));
+  }, []);
 
   return (
-    <Stack>
-      <Stack
-        direction={["column-reverse", "row"]}
-        alignItems="center"
-        justifyContent="space-between"
-        mb="45px"
-      >
-        <Text
-          fontSize={["2xl", "3xl"]}
-          fontWeight="bold"
-          color="secondary.500"
-        >
-          <ArrowLeftIcon fontSize={["14px", "18px"]} />
-          <Text as="span" px="8px">Now Playing</Text>
-          <ArrowRightIcon fontSize={["14px", "18px"]} />
-        </Text>
-      </Stack>
-      <SimpleGrid columns={[2, 2, 4, 5]} spacing="15px">
-        <MovieItem
-          id={1}
-          image={SamplePoster}
-          title="Sample 1"
-          date="2001"
-          genre={["Horror", "Thriller"]}
-        />
-        <MovieItem
-          id={1}
-          image={SamplePoster}
-          title="Sample 2"
-          date="2002"
-          genre={["Horror", "Suspense"]}
-        />
-        <MovieItem
-          id={1}
-          image={SamplePoster}
-          title="Sample 3"
-          date="2003"
-          genre={["Comedy"]}
-        />
-        <MovieItem
-          id={1}
-          image={SamplePoster}
-          title="Sample 4"
-          date="2004"
-          genre={[]}
-        />
-        <MovieItem
-          id={1}
-          image={SamplePoster}
-          title="Sample 5"
-          date="2005"
-          genre={["Drama"]}
-        />
-        <MovieItem
-          id={1}
-          image={SamplePoster}
-          title="Sample 6"
-          date="2006"
-          genre={["Drama", "Sci-Fi"]}
-        />
-        <MovieItem
-          id={1}
-          image={SamplePoster}
-          title="Sample 7"
-          date="2007"
-          genre={["Drama", "Sci-Fi"]}
-        />
-      </SimpleGrid>
-    </Stack>
+    <>
+      {loading ? (
+        <Stack alignItems="center">
+          <Spinner
+            thickness='4px'
+            speed='0.65s'
+            emptyColor='gray.200'
+            color='blue.500'
+            size='xl'
+          />
+        </Stack>
+      ) : (
+        <Stack>
+          <Stack
+            direction={["column-reverse", "row"]}
+            alignItems="center"
+            justifyContent="space-between"
+            mb="25px"
+          >
+            <Text
+              fontSize={["2xl", "3xl"]}
+              fontWeight="bold"
+              color="secondary.500"
+            >
+              <ArrowLeftIcon fontSize={["14px", "18px"]} />
+              <Text as="span" px="8px">Now Playing</Text>
+              <ArrowRightIcon fontSize={["14px", "18px"]} />
+            </Text>
+          </Stack>
+          <SimpleGrid columns={[2, 2, 4, 5]} spacing="15px">
+            {data.movies.results.map((movie: {
+              id: number;
+              poster_path: string;
+              title: string;
+              release_date: string;
+              genre_ids: Array<number>
+            }) => (
+              <MovieItem
+                key={`movie-${movie.id}`}
+                id={movie.id}
+                image={imagePath + movie.poster_path}
+                title={movie.title}
+                date={movie.release_date.split('-')[0]}
+                genre={movie.genre_ids.map((id: number) => GENRE[id])}
+              />
+            ))}
+          </SimpleGrid>
+        </Stack>
+      )}
+    </>
   )
 };
 export default MovieList;

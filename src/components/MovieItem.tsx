@@ -36,7 +36,7 @@ const MovieItem: React.FC<MovieItemType> = ({
             src={image}
             borderRadius="lg"
             transition="transform .2s"
-            mb="10px"
+            mb="15px"
             _groupHover = {{ transform: "scale(1.02)", borderTopRadius: "lg" }}
           >
           </Image>
@@ -47,10 +47,20 @@ const MovieItem: React.FC<MovieItemType> = ({
           spacing={0}
           _groupHover={{ color: "secondary.500" }}
         >
-          <Text fontSize="large" fontWeight="bold">
+          <Text
+            fontSize="large"
+            fontWeight="bold"
+            display="-webkit-box"
+            overflow="hidden"
+            style={{ WebkitLineClamp: 2, WebkitBoxOrient: 'vertical'}}
+          >
             {title}
-            {date && (<Text as="span" fontSize="xs" ms="5px">({date})</Text>)}
           </Text>
+          {date && (
+            <Text as="span" fontSize="xs" fontWeight="bold">
+              ({date})
+            </Text>
+          )}
           <Text
             fontSize="xs"
             color="gray.300"
