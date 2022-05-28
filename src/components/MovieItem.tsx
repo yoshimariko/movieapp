@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import {
@@ -7,11 +7,13 @@ import {
   Text,
   Image,
   LinkBox,
-  LinkOverlay,
+  LinkOverlay
 } from '@chakra-ui/react';
 
+import { IMAGE_PATH } from '../api';
 import { favoritesAtom } from '../recoil/atom';
 
+import ImagePlaceHolder from '../assets/image/placeholder.png';
 import FavoriteButton from './FavoriteButton';
 
 interface MovieItemType {
@@ -31,21 +33,25 @@ const MovieItem: React.FC<MovieItemType> = ({
   genre,
   onItemClick
 }) => {
+  const [imagePath, setimagePath] = useState<string>('');
   const [favorites] = useRecoilState(favoritesAtom);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    IMAGE_PATH.then((path: string) => setimagePath(path));
+  }, []);
 
   return (
     <Stack p="8px" role="group">
       <LinkBox p="4px" overflow="hidden">
         <Box position="relative">
           <Image
-            src={image}
+            src={image ? imagePath + image : ImagePlaceHolder}
             borderRadius="lg"
             transition="transform .2s"
             mb="15px"
-            _groupHover = {{ transform: "scale(1.02)", borderTopRadius: "lg" }}
-          >
-          </Image>
+            _groupHover={{ transform: 'scale(1.02)', borderTopRadius: 'lg' }}
+          ></Image>
           <FavoriteButton
             movideId={id}
             isActive={favorites.includes(id.toString())}
@@ -58,16 +64,13 @@ const MovieItem: React.FC<MovieItemType> = ({
             onItemClick && onItemClick();
           }}
         ></LinkOverlay>
-        <Stack
-          spacing={0}
-          _groupHover={{ color: "secondary.500" }}
-        >
+        <Stack spacing={0} _groupHover={{ color: 'secondary.500' }}>
           <Text
             fontSize="large"
             fontWeight="bold"
             display="-webkit-box"
             overflow="hidden"
-            style={{ WebkitLineClamp: 2, WebkitBoxOrient: 'vertical'}}
+            style={{ WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}
           >
             {title}
           </Text>
@@ -79,10 +82,12 @@ const MovieItem: React.FC<MovieItemType> = ({
           <Text
             fontSize="xs"
             color="gray.300"
-            _groupHover={{ color: "secondary.500" }}
+            _groupHover={{ color: 'secondary.500' }}
           >
             {genre.map((item, ind) => {
-              return (genre.length > 1) && ind !== (genre.length - 1) ? `${item}, ` : item
+              return genre.length > 1 && ind !== genre.length - 1
+                ? `${item}, `
+                : item;
             })}
           </Text>
         </Stack>

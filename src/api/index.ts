@@ -7,7 +7,7 @@ import { ApolloClient, DocumentNode, InMemoryCache, gql } from '@apollo/client';
 const restLink = new RestLink({
   uri: 'https://api.themoviedb.org/3/',
   headers: {
-    'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`
+    Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
   }
 });
 
@@ -16,27 +16,30 @@ export const client = new ApolloClient({
   link: restLink
 });
 
-export const GET = (query: DocumentNode, variables?: any) => {
-  return client.query({ query, variables }).then(res => res.data);
-}
+export const GET = (query: DocumentNode, variables?: unknown) => {
+  return client.query({ query, variables }).then((res) => res.data);
+};
 
 // ================================================
 // TMDB Config
 // ================================================
 const configQuery = gql`
-query GetConfig($key: String) {
-  config (key: $key) @rest(type: "Config", path: "/configuration?api_key={args.key}") {
-    images
+  query GetConfig($key: String) {
+    config(key: $key)
+      @rest(type: "Config", path: "/configuration?api_key={args.key}") {
+      images
+    }
   }
-}
 `;
 
-export const IMAGE_PATH = client.query({
+export const IMAGE_PATH = client
+  .query({
     query: configQuery,
     variables: { key: process.env.REACT_APP_API_KEY }
-  }).then(res => {
-    return res.data.config.images.secure_base_url+"original/";
   })
+  .then((res) => {
+    return res.data.config.images.secure_base_url + 'original/';
+  });
 
 // ================================================
 // Others
@@ -45,7 +48,7 @@ export const IMAGE_PATH = client.query({
  * No genre API available, using this as alternative.
  * source: https://www.themoviedb.org/talk/5f58b094befb0900355684a6
  */
- export const GENRE : { [key: string]: string } = {
+export const GENRE: { [key: string]: string } = {
   '28': 'Action',
   '12': 'Adventure',
   '16': 'Animation',

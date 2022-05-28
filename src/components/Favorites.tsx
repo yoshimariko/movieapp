@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { gql } from '@apollo/client';
-import {
-  VStack,
-  HStack,
-  SimpleGrid,
-  Slide,
-  Text,
-} from '@chakra-ui/react';
+import { VStack, HStack, SimpleGrid, Slide, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 
 import { favoritesAtom } from '../recoil/atom';
@@ -26,20 +20,17 @@ interface FavoritesItemsType {
     poster_path: string;
     title: string;
     release_date: string;
-    genres: Array<{ name: string; }>
-  }
+    genres: Array<{ name: string }>;
+  };
 }
 
-const Favorites: React.FC<FavoritesType> = ({
-  isOpen,
-  onToggle
-}) => {
+const Favorites: React.FC<FavoritesType> = ({ isOpen, onToggle }) => {
   const [movieList, setMovieList] = useState<Array<FavoritesItemsType>>([]);
   const [imagePath, setimagePath] = useState<string>('');
   const [favorites] = useRecoilState(favoritesAtom);
 
   const favoritesQuery = gql`
-    query GetFavorites ($id: String) {
+    query GetFavorites($id: String) {
       favorites(id: $id) @rest(type: "Favorite", path: "/movie/{args.id}") {
         id
         poster_path
@@ -54,7 +45,7 @@ const Favorites: React.FC<FavoritesType> = ({
 
   useEffect(() => {
     const promises = favorites.map(async (id: string) => {
-      return await GET(favoritesQuery, {id: id})
+      return await GET(favoritesQuery, { id: id });
     });
     Promise.all(promises).then((res) => setMovieList(res));
 
@@ -67,7 +58,12 @@ const Favorites: React.FC<FavoritesType> = ({
       direction="bottom"
       in={isOpen}
     >
-      <VStack spacing="35px" backgroundColor="tertiary.500" minHeight="100%" pb="20px">
+      <VStack
+        spacing="35px"
+        backgroundColor="tertiary.500"
+        minHeight="100%"
+        pb="20px"
+      >
         <VStack
           alignItems="center"
           justifyContent="center"
@@ -76,11 +72,7 @@ const Favorites: React.FC<FavoritesType> = ({
         >
           <CloseIcon onClick={onToggle} fontSize="2xl" my="30px" />
           <HStack>
-            <Text
-              fontSize="4xl"
-              fontWeight="bold"
-              color="secondary.500"
-            >
+            <Text fontSize="4xl" fontWeight="bold" color="secondary.500">
               Favorites
             </Text>
           </HStack>
@@ -100,6 +92,6 @@ const Favorites: React.FC<FavoritesType> = ({
         </SimpleGrid>
       </VStack>
     </Slide>
-  )
-}
+  );
+};
 export default Favorites;

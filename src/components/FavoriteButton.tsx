@@ -5,26 +5,30 @@ import { BsSuitHeartFill } from 'react-icons/bs';
 
 import { favoritesAtom } from '../recoil/atom';
 
-const FavoriteButton: React.FC<{ movideId: number; isActive?: boolean }> = ({ movideId, isActive = false }) => {
+const FavoriteButton: React.FC<{ movideId: number; isActive?: boolean }> = ({
+  movideId,
+  isActive = false
+}) => {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [favorite, setFavorites] = useRecoilState(favoritesAtom);
-  
+
   const onFavoriteClick = () => {
-    setFavorites((prev: any) => {
+    setFavorites((prev: Array<string>) => {
       if (prev.includes(movideId.toString())) {
         return prev.filter((id: string) => id !== movideId.toString());
       } else {
-        return [...prev, movideId.toString()]
+        return [...prev, movideId.toString()];
       }
     });
-    setIsFavorite(prevState => !prevState);
+    setIsFavorite((prevState) => !prevState);
   };
-  
+
   useEffect(() => {
     setIsFavorite(isActive);
   }, [isActive]);
 
-  return(
+  return (
     <Tooltip
       hasArrow
       bg="gray.300"
@@ -47,10 +51,7 @@ const FavoriteButton: React.FC<{ movideId: number; isActive?: boolean }> = ({ mo
         onClick={onFavoriteClick}
         _hover={{ backgroundColor: 'secondary.500', color: 'white' }}
       >
-        <Icon
-          as={BsSuitHeartFill}
-          fontSize={["xs", "md", "md"]}
-        />
+        <Icon as={BsSuitHeartFill} fontSize={['xs', 'md', 'md']} />
       </Link>
     </Tooltip>
   );

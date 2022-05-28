@@ -4,7 +4,7 @@ import { Container } from '@chakra-ui/react';
 import { RecoilRoot } from 'recoil';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { client } from './api'
+import { client } from './api';
 
 import Header from './components/Header';
 import MovieList from './MovieList';
@@ -28,6 +28,6 @@ const App: React.FC = () => {
       </ApolloProvider>
     </RecoilRoot>
   );
-}
+};
 
 export default App;

@@ -30,12 +30,7 @@ const Header: React.FC = () => {
         w="100%"
         p="25px"
       >
-        <Text
-          fontSize="3xl"
-          fontWeight="bold"
-          alignSelf="center"
-          m="0"
-        >
+        <Text fontSize="3xl" fontWeight="bold" alignSelf="center" m="0">
           MOVIECollect
         </Text>
         <Stack
@@ -53,7 +48,9 @@ const Header: React.FC = () => {
             <Button
               size={['md', 'lg', 'lg']}
               onClick={() => navigate('/search?term=' + searchQuery)}
-            >Search</Button>
+            >
+              Search
+            </Button>
           </HStack>
           <HStack
             justifyContent={['center', 'center', 'initial']}
@@ -61,13 +58,13 @@ const Header: React.FC = () => {
             h="50px"
           >
             <Divider orientation="vertical" borderColor="gray.600" />
-              <RouterLink to="/">
-                <Icon as={GoHome} color="secondary.500" fontSize="2xl" />
-              </RouterLink>
+            <RouterLink to="/">
+              <Icon as={GoHome} color="secondary.500" fontSize="2xl" />
+            </RouterLink>
             <Divider orientation="vertical" borderColor="gray.600" />
-              <Link href="#" onClick={onToggle} display="flex">
-                <Icon as={GoHeart} color="secondary.500" fontSize="2xl" />
-              </Link>
+            <Link href="#" onClick={onToggle} display="flex">
+              <Icon as={GoHeart} color="secondary.500" fontSize="2xl" />
+            </Link>
             <Divider orientation="vertical" borderColor="gray.600" />
           </HStack>
         </Stack>
@@ -75,6 +72,6 @@ const Header: React.FC = () => {
       <Divider />
       <Favorites onToggle={onToggle} isOpen={isOpen} />
     </>
-  )
+  );
 };
 export default Header;

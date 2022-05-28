@@ -8,7 +8,7 @@ const Button: ComponentStyleConfig = {
     solid: {
       backgroundColor: 'secondary.500',
       _hover: {
-        backgroundColor: 'secondary.50',
+        backgroundColor: 'secondary.50'
       }
     },
     outline: {
@@ -49,7 +49,7 @@ const Link: ComponentStyleConfig = {
       boxShadow: 'none'
     }
   }
-}
+};
 
 // ================================================
 // Theme
@@ -86,4 +86,3 @@ export const theme = extendTheme({
     Link
   }
 });
-
