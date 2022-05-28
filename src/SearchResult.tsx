@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Stack,
   SimpleGrid,
   Text,
   Spinner
 } from '@chakra-ui/react';
-import {
-  ArrowRightIcon,
-  ArrowLeftIcon
-} from '@chakra-ui/icons';
 import { gql, useQuery } from '@apollo/client';
 
 import { GENRE, IMAGE_PATH } from './api';
 
 import MovieItem from './components/MovieItem';
 
-const MovieList: React.FC = () => {
+const SearchResult: React.FC = () => {
   const [imagePath, setimagePath] = useState<string>('');
-  
-  const nowPlayingQuery = gql`
-    query GetNowPlaying {
-      movies @rest(type: "MovieList", path: "/movie/now_playing") {
+  const [urlParams] = useSearchParams();
+  const keyword = urlParams.get('term');
+
+  const searchQuery = gql`
+    query SearchMovie(
+      $key: String
+      $keyword: String
+      ) {
+      movies(key: $key, keyword: $keyword) @rest(type: "MovieList", path: "/search/movie?api_key={args.key}&query={args.keyword}") {
         results {
           id
           poster_path
@@ -31,14 +33,18 @@ const MovieList: React.FC = () => {
       }
     }
   `;
-
-  const { loading, data } = useQuery(nowPlayingQuery);
+  const { loading, data } = useQuery(searchQuery, {
+    variables: {
+      key: process.env.REACT_APP_API_KEY,
+      keyword: keyword
+    }
+  });
 
   useEffect(() => {
     IMAGE_PATH.then((path: string) => setimagePath(path));
-  }, []);
+  }, [keyword]);
 
-  return (
+  return(
     <>
       {loading ? (
         <Stack alignItems="center">
@@ -53,6 +59,7 @@ const MovieList: React.FC = () => {
       ) : (
         <Stack>
           <Stack
+            direction={["column-reverse", "row"]}
             alignItems="center"
             justifyContent="space-between"
             mb="25px"
@@ -62,11 +69,10 @@ const MovieList: React.FC = () => {
               fontWeight="bold"
               color="secondary.500"
             >
-              <ArrowLeftIcon fontSize={["14px", "18px"]} />
-              <Text as="span" px="8px">Now Playing</Text>
-              <ArrowRightIcon fontSize={["14px", "18px"]} />
+              <Text as="span" px="8px">Search Results:</Text>
             </Text>
           </Stack>
+          {data.movies.results <= 0 && <Text ps="25px">No Search Found.</Text>}
           <SimpleGrid columns={[2, 2, 4, 5]} spacing="15px">
             {data.movies.results.map((movie: {
               id: number;
@@ -88,6 +94,6 @@ const MovieList: React.FC = () => {
         </Stack>
       )}
     </>
-  )
-};
-export default MovieList;
+  );
+}
+export default SearchResult;

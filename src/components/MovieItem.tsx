@@ -42,7 +42,10 @@ const MovieItem: React.FC<MovieItemType> = ({
           </Image>
           <FavoriteButton movideId={1} />
         </Box>
-        <LinkOverlay href="#" onClick={() => navigate(id.toString())}></LinkOverlay>
+        <LinkOverlay
+          href="#"
+          onClick={() => navigate('/' + id.toString())}
+        ></LinkOverlay>
         <Stack
           spacing={0}
           _groupHover={{ color: "secondary.500" }}

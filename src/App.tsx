@@ -8,6 +8,7 @@ import { client } from './api'
 import Header from './components/Header';
 import MovieList from './MovieList';
 import MovieDetails from './MovieDetail';
+import SearchResult from './SearchResult';
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/" element={<MovieList />} />
               <Route path="/:id" element={<MovieDetails />} />
+              <Route path="/search" element={<SearchResult />} />
             </Routes>
           </Container>
       </BrowserRouter>

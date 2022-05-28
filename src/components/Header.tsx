@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Stack,
   HStack,
@@ -16,7 +16,9 @@ import { GoHome, GoHeart } from 'react-icons/go';
 import Favorites from '../components/Favorites';
 
 const Header: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { isOpen, onToggle } = useDisclosure();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -43,8 +45,15 @@ const Header: React.FC = () => {
           spacing={['35px', '20px', '20px']}
         >
           <HStack>
-            <Input type="text" size={['md', 'lg', 'lg']} />
-            <Button size={['md', 'lg', 'lg']}>Search</Button>
+            <Input
+              type="text"
+              size={['md', 'lg', 'lg']}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <Button
+              size={['md', 'lg', 'lg']}
+              onClick={() => navigate('/search?term=' + searchQuery)}
+            >Search</Button>
           </HStack>
           <HStack
             justifyContent={['center', 'center', 'initial']}
