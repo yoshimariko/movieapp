@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Stack,
+  Box,
   Text,
-  Link,
   Image,
   LinkBox,
   LinkOverlay,
-  Icon,
 } from '@chakra-ui/react';
-import { BsSuitHeartFill } from 'react-icons/bs';
+
+import FavoriteButton from './FavoriteButton';
 
 interface MovieItemType {
   id: number;
@@ -26,48 +26,22 @@ const MovieItem: React.FC<MovieItemType> = ({
   date,
   genre
 }) => {
-  const [isFavorite, setFavorite] = useState<boolean>(false);
   const navigate = useNavigate();
-
-  const onFavoriteClick = () => setFavorite(prevState => !prevState);
 
   return (
     <Stack p="8px" role="group">
-      <LinkBox position="relative" p="4px" overflow="hidden">
-        <Link
-          display="flex"
-          backgroundColor="black"
-          justifyContent="center"
-          borderTopRadius="lg"
-          position="absolute"
-          transition=".5s ease"
-          zIndex="1"
-          left="0"
-          py="4px"
-          w="100%"
-          h={isFavorite ? '10%' : '0'}
-          top={isFavorite ? '0' : '-15%'}
-          color={isFavorite ? 'secondary.500' : 'gray.500'}
-          onClick={onFavoriteClick}
-          _groupHover = {{ height: '10%', top: '0' }}
-        >
-          <Icon
-            as={BsSuitHeartFill}
-            fontSize="lg"
-            position="absolute"
-            transform="translate(-50%, -50%)"
-            top="45%"
-            left="50%"
-          />
-        </Link>
-        <Image
-          src={image}
-          borderRadius="lg"
-          transition="transform .2s"
-          mb="10px"
-          _groupHover = {{ transform: "scale(1.02)", borderTopRadius: "lg" }}
-        >
-        </Image>
+      <LinkBox p="4px" overflow="hidden">
+        <Box position="relative">
+          <Image
+            src={image}
+            borderRadius="lg"
+            transition="transform .2s"
+            mb="10px"
+            _groupHover = {{ transform: "scale(1.02)", borderTopRadius: "lg" }}
+          >
+          </Image>
+          <FavoriteButton movideId={1} />
+        </Box>
         <LinkOverlay href="#" onClick={() => navigate(id.toString())}></LinkOverlay>
         <Stack
           spacing={0}

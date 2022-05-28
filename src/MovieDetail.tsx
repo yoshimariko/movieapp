@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Stack,
   Image,
@@ -30,7 +30,10 @@ const MovieImage: React.FC<MovieImageType> = ({
   image,
   id
 }) => {
-  // TODO: use Id for add to favorite.
+  const [isFavorite, setFavorite] = useState<boolean>(false);
+
+  const onFavoriteClick = () => setFavorite(prevState => !prevState);
+  
   return(
     <Stack
       spacing="20px"
@@ -46,10 +49,11 @@ const MovieImage: React.FC<MovieImageType> = ({
       <Button
         size="lg"
         width={["100%", "initial", "100%"]}
-        variant="outline"
+        variant={isFavorite ? 'solid' : 'outline'}
+        onClick={onFavoriteClick}
       >
         <Icon as={BsSuitHeartFill} me="10px" />
-        Add to Favorite
+        {isFavorite ? 'Remove Favorite' : 'Add to Favorite'}
       </Button>
     </Stack>
   );
@@ -88,58 +92,87 @@ const MovieInfo: React.FC<MovieInfoType> = ({
 
 const MovieDetails: React.FC = () => {
   return(
-    <Stack
-      display="flex"
-      backgroundImage={SampleBackdrop}
-      backgroundRepeat="no-repeat"
-      alignItems="center"
-      justifyContent="center"
-      position="relative"
-      minHeight="87.2vh"
-      h="100%"
-      py="45px"
-      m="-40px"
-    >
-      <Box
-        backgroundColor="blackAlpha.800"
-        position="absolute"
-        top="0"
-        w="100%"
-        h="100%"
-      ></Box>
+    <Stack>
       <Stack
-        direction={["column", "column", "row"]}
-        alignItems="start"
-        spacing="40px"
+        display="flex"
+        borderRadius="lg"
+        backgroundImage={SampleBackdrop}
+        backgroundRepeat="no-repeat"
+        backgroundSize="cover"
+        alignItems="center"
+        justifyContent="center"
         position="relative"
-        zIndex="1"
-        mx="auto"
-        w="80%"
+        py="45px"
+        mx="-40px"
+        mt="-40px"
       >
-        <MovieImage image={SamplePoster} id="1" />
+        <Box
+          backgroundColor="blackAlpha.800"
+          position="absolute"
+          top="0"
+          w="100%"
+          h="100%"
+        ></Box>
         <Stack
-          spacing="25px"
-          py={["1rem", "1rem", "3rem"]}
-          maxWidth="100%"
+          direction={["column", "column", "row"]}
+          alignItems="start"
+          spacing="40px"
+          position="relative"
+          zIndex="1"
+          mx="auto"
+          w="80%"
         >
-          <MovieInfo
-            title="Sample Title"
-            year="2001"
-            releaseDate="01/01/2001"
-            lang="JP"
-            genre={['Crime', 'Thriller']}
-            runtime="2h 16m"
-          />
-          <Box maxW="100%">
-            <Text fontSize="xl" fontWeight="bold" mb="8px">Overview</Text>
-            <Text
-              fontSize={["xs", "xs", "sm"]}
-              color="gray.300"
-              _groupHover={{ color: "secondary.500" }}
-            >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </Text>
-          </Box>
+          <MovieImage image={SamplePoster} id="1" />
+          <Stack
+            spacing="25px"
+            py={["1rem", "1rem", "3rem"]}
+            maxWidth="100%"
+          >
+            <MovieInfo
+              title="Sample Title"
+              year="2001"
+              releaseDate="01/01/2001"
+              lang="JP"
+              genre={['Crime', 'Thriller']}
+              runtime="2h 16m"
+            />
+            <Box maxW="100%">
+              <Text fontSize="xl" fontWeight="bold" mb="8px">Overview</Text>
+              <Text
+                fontSize={["xs", "xs", "sm"]}
+                color="gray.300"
+                _groupHover={{ color: "secondary.500" }}
+              >
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </Text>
+            </Box>
+            <Box maxW="100%">
+              <Text fontSize="xl" fontWeight="bold" mb="8px">Screenshots</Text>
+              <Stack direction="row" spacing="15px" overflowX="auto">
+                <Image src={SampleBackdrop} width={["30%", "30%", "20%", "15%"]} />
+                <Image src={SampleBackdrop} width={["30%", "30%", "20%", "15%"]} />
+                <Image src={SampleBackdrop} width={["30%", "30%", "20%", "15%"]} />
+                <Image src={SampleBackdrop} width={["30%", "30%", "20%", "15%"]} />
+                <Image src={SampleBackdrop} width={["30%", "30%", "20%", "15%"]} />
+                <Image src={SampleBackdrop} width={["30%", "30%", "20%", "15%"]} />
+                <Image src={SampleBackdrop} width={["30%", "30%", "20%", "15%"]} />
+              </Stack>
+            </Box>
+          </Stack>
+        </Stack>
+      </Stack>
+      <Stack pt="20px">
+        <Text fontSize={["xl", "xl", "2xl"]} fontWeight="bold">
+          Recommendations
+        </Text>
+        <Stack direction="row" spacing="15px" overflowX="auto">
+          <Image src={SamplePoster} width={["30%", "30%", "20%", "15%"]} />
+          <Image src={SamplePoster} width={["30%", "30%", "20%", "15%"]} />
+          <Image src={SamplePoster} width={["30%", "30%", "20%", "15%"]} />
+          <Image src={SamplePoster} width={["30%", "30%", "20%", "15%"]} />
+          <Image src={SamplePoster} width={["30%", "30%", "20%", "15%"]} />
+          <Image src={SamplePoster} width={["30%", "30%", "20%", "15%"]} />
+          <Image src={SamplePoster} width={["30%", "30%", "20%", "15%"]} />
         </Stack>
       </Stack>
     </Stack>

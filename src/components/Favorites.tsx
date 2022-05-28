@@ -16,7 +16,11 @@ interface FavoritesType {
   onToggle: () => void;
 }
 
-const Favorites: React.FC<FavoritesType> = ({ isOpen, onToggle }) => {
+const Favorites: React.FC<FavoritesType> = ({
+  isOpen,
+  onToggle
+}) => {
+  // FIXME: Close favorite on movie image click
   return (
     <Slide
       style={{ zIndex: 10, top: 0, overflow: 'scroll', minHeight: '100vh' }}

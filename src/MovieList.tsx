@@ -15,7 +15,7 @@ import SamplePoster from './assets/image/sample.jpeg';
 const MovieList: React.FC = () => {
 
   return (
-    <>
+    <Stack>
       <Stack
         direction={["column-reverse", "row"]}
         alignItems="center"
@@ -83,7 +83,7 @@ const MovieList: React.FC = () => {
           genre={["Drama", "Sci-Fi"]}
         />
       </SimpleGrid>
-    </>
+    </Stack>
   )
 };
 export default MovieList;
