@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { gql } from '@apollo/client';
 import {
   VStack,
   HStack,
@@ -8,19 +10,57 @@ import {
 } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 
+import { favoritesAtom } from '../recoil/atom';
+import { GET, IMAGE_PATH } from '../api';
+
 import MovieItem from './MovieItem';
-import SamplePoster from '../assets/image/sample.jpeg';
 
 interface FavoritesType {
   isOpen: boolean;
   onToggle: () => void;
 }
 
+interface FavoritesItemsType {
+  favorites: {
+    id: number;
+    poster_path: string;
+    title: string;
+    release_date: string;
+    genres: Array<{ name: string; }>
+  }
+}
+
 const Favorites: React.FC<FavoritesType> = ({
   isOpen,
   onToggle
 }) => {
-  // FIXME: Close favorite on movie image click
+  const [movieList, setMovieList] = useState<Array<FavoritesItemsType>>([]);
+  const [imagePath, setimagePath] = useState<string>('');
+  const [favorites] = useRecoilState(favoritesAtom);
+
+  const favoritesQuery = gql`
+    query GetFavorites ($id: String) {
+      favorites(id: $id) @rest(type: "Favorite", path: "/movie/{args.id}") {
+        id
+        poster_path
+        title
+        release_date
+        genres {
+          name
+        }
+      }
+    }
+  `;
+
+  useEffect(() => {
+    const promises = favorites.map(async (id: string) => {
+      return await GET(favoritesQuery, {id: id})
+    });
+    Promise.all(promises).then((res) => setMovieList(res));
+
+    IMAGE_PATH.then((path: string) => setimagePath(path));
+  }, [favorites, favoritesQuery]);
+
   return (
     <Slide
       style={{ zIndex: 10, top: 0, overflow: 'scroll', minHeight: '100vh' }}
@@ -46,55 +86,16 @@ const Favorites: React.FC<FavoritesType> = ({
           </HStack>
         </VStack>
         <SimpleGrid columns={[2, 2, 4, 5]} spacing="35px" px="15px">
-          <MovieItem
-            id={1}
-            image={SamplePoster}
-            title="Sample 1"
-            date="2001"
-            genre={["Horror", "Thriller"]}
-          />
-          <MovieItem
-            id={1}
-            image={SamplePoster}
-            title="Sample 2"
-            date="2002"
-            genre={["Horror", "Suspense"]}
-          />
-          <MovieItem
-            id={1}
-            image={SamplePoster}
-            title="Sample 3"
-            date="2003"
-            genre={["Comedy"]}
-          />
-          <MovieItem
-            id={1}
-            image={SamplePoster}
-            title="Sample 4"
-            date="2004"
-            genre={[]}
-          />
-          <MovieItem
-            id={1}
-            image={SamplePoster}
-            title="Sample 5"
-            date="2005"
-            genre={["Drama"]}
-          />
-          <MovieItem
-            id={1}
-            image={SamplePoster}
-            title="Sample 6"
-            date="2006"
-            genre={["Drama", "Sci-Fi"]}
-          />
-          <MovieItem
-            id={1}
-            image={SamplePoster}
-            title="Sample 7"
-            date="2007"
-            genre={["Drama", "Sci-Fi"]}
-          />
+          {movieList.map((movie: FavoritesItemsType) => (
+            <MovieItem
+              key={`favorite-${movie.favorites.id}`}
+              id={movie.favorites.id}
+              image={imagePath + movie.favorites.poster_path}
+              title={movie.favorites.title}
+              date={movie.favorites.release_date.split('-')[0]}
+              genre={movie.favorites.genres.map((genre) => genre.name)}
+            />
+          ))}
         </SimpleGrid>
       </VStack>
     </Slide>

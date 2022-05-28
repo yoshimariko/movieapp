@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { Link, Icon, Tooltip } from '@chakra-ui/react';
 import { BsSuitHeartFill } from 'react-icons/bs';
 
-const FavoriteButton: React.FC<{ movideId: number }> = ({ movideId }) => {
-  const [isFavorite, setFavorite] = useState<boolean>(false);
+import { favoritesAtom } from '../recoil/atom';
 
-  const onFavoriteClick = () => setFavorite(prevState => !prevState);
+const FavoriteButton: React.FC<{ movideId: number; isActive?: boolean }> = ({ movideId, isActive = false }) => {
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [favorite, setFavorites] = useRecoilState(favoritesAtom);
+  
+  const onFavoriteClick = () => {
+    setFavorites((prev: any) => {
+      if (prev.includes(movideId.toString())) {
+        return prev.filter((id: string) => id !== movideId.toString());
+      } else {
+        return [...prev, movideId.toString()]
+      }
+    });
+    setIsFavorite(prevState => !prevState);
+  };
+  
+  useEffect(() => {
+    setIsFavorite(isActive);
+  }, [isActive]);
 
   return(
     <Tooltip

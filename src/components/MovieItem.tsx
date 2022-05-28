@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import {
   Stack,
   Box,
@@ -8,6 +9,8 @@ import {
   LinkBox,
   LinkOverlay,
 } from '@chakra-ui/react';
+
+import { favoritesAtom } from '../recoil/atom';
 
 import FavoriteButton from './FavoriteButton';
 
@@ -26,6 +29,7 @@ const MovieItem: React.FC<MovieItemType> = ({
   date,
   genre
 }) => {
+  const [favorites] = useRecoilState(favoritesAtom);
   const navigate = useNavigate();
 
   return (
@@ -40,7 +44,10 @@ const MovieItem: React.FC<MovieItemType> = ({
             _groupHover = {{ transform: "scale(1.02)", borderTopRadius: "lg" }}
           >
           </Image>
-          <FavoriteButton movideId={1} />
+          <FavoriteButton
+            movideId={id}
+            isActive={favorites.includes(id.toString())}
+          />
         </Box>
         <LinkOverlay
           href="#"

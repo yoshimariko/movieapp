@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import { gql, useQuery } from '@apollo/client';
 import {
   Stack,
@@ -11,6 +12,8 @@ import {
   Icon
 } from '@chakra-ui/react';
 import { BsSuitHeartFill } from 'react-icons/bs';
+
+import { favoritesAtom } from './recoil/atom';
 
 import { IMAGE_PATH } from './api';
 
@@ -32,9 +35,23 @@ const MovieImage: React.FC<MovieImageType> = ({
   image,
   id
 }) => {
-  const [isFavorite, setFavorite] = useState<boolean>(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [favorites, setFavorites] = useRecoilState(favoritesAtom);
 
-  const onFavoriteClick = () => setFavorite(prevState => !prevState);
+  const onFavoriteClick = () => {
+    setFavorites((prev: any) => {
+      if (prev.includes(id)) {
+        return prev.filter((favIdid: string) => favIdid !== id);
+      } else {
+        return [...prev, id]
+      }
+    });
+    setIsFavorite(prevState => !prevState);
+  };
+
+  useEffect(() => {
+    setIsFavorite(favorites.includes(id));
+  }, [favorites, id]);
   
   return(
     <Stack
@@ -184,7 +201,10 @@ const MovieDetails: React.FC = () => {
               mx="auto"
               w="80%"
             >
-              <MovieImage image={imagePath + data.details?.poster_path} id="1" />
+              <MovieImage
+                image={imagePath + data.details?.poster_path}
+                id={id?.toString() || ''}
+              />
               <Stack
                 spacing="25px"
                 py={["1rem", "1rem", "3rem"]}

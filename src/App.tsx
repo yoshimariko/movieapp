@@ -1,6 +1,7 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { Container } from '@chakra-ui/react';
+import { RecoilRoot } from 'recoil';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { client } from './api'
@@ -12,9 +13,10 @@ import SearchResult from './SearchResult';
 
 const App: React.FC = () => {
   return (
-    <ApolloProvider client={client}>
-      <BrowserRouter>
-        <Header />
+    <RecoilRoot>
+      <ApolloProvider client={client}>
+        <BrowserRouter>
+          <Header />
           <Container p="40px" maxW="100%">
             <Routes>
               <Route path="/" element={<MovieList />} />
@@ -22,8 +24,9 @@ const App: React.FC = () => {
               <Route path="/search" element={<SearchResult />} />
             </Routes>
           </Container>
-      </BrowserRouter>
-    </ApolloProvider>
+        </BrowserRouter>
+      </ApolloProvider>
+    </RecoilRoot>
   );
 }
 
