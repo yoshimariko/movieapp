@@ -16,7 +16,6 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.5",
     "apollo-link-rest": "^0.9.0-rc.1",
-    "eslint": "^8.16.0",
     "framer-motion": "^6",
     "graphql": "^16.5.0",
     "graphql-anywhere": "^4.2.7",
@@ -52,5 +51,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "@typescript-eslint/parser": "^5.26.0",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.30.0",
+    "prettier": "^2.6.2"
   }
 }
