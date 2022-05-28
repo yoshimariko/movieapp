@@ -20,6 +20,7 @@ interface MovieItemType {
   title: string;
   date: string;
   genre: Array<string>;
+  onItemClick?: () => void;
 }
 
 const MovieItem: React.FC<MovieItemType> = ({
@@ -27,7 +28,8 @@ const MovieItem: React.FC<MovieItemType> = ({
   image,
   title,
   date,
-  genre
+  genre,
+  onItemClick
 }) => {
   const [favorites] = useRecoilState(favoritesAtom);
   const navigate = useNavigate();
@@ -51,7 +53,10 @@ const MovieItem: React.FC<MovieItemType> = ({
         </Box>
         <LinkOverlay
           href="#"
-          onClick={() => navigate('/' + id.toString())}
+          onClick={() => {
+            navigate('/' + id.toString());
+            onItemClick && onItemClick();
+          }}
         ></LinkOverlay>
         <Stack
           spacing={0}

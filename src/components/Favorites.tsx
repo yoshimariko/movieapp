@@ -94,6 +94,7 @@ const Favorites: React.FC<FavoritesType> = ({
               title={movie.favorites.title}
               date={movie.favorites.release_date.split('-')[0]}
               genre={movie.favorites.genres.map((genre) => genre.name)}
+              onItemClick={onToggle}
             />
           ))}
         </SimpleGrid>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { gql, useQuery } from '@apollo/client';
 import {
@@ -88,9 +88,16 @@ const MovieInfo: React.FC<MovieInfoType> = ({
 }) => {
   return (
     <Box maxW="100%">
-      <Text fontSize={["2xl", "2xl", "4xl"]} fontWeight="bold">
+      <Text
+        fontSize={["2xl", "2xl", "4xl"]}
+        fontWeight="bold"
+      >
         {title}
-        <Text as="span" fontSize={["md", "md", "lg"]} ms="5px">
+        <Text
+          as="span"
+          fontSize={["md", "md", "lg"]}
+          ms="5px"
+        >
           ({year})
         </Text>
       </Text>
@@ -119,6 +126,7 @@ const MovieInfo: React.FC<MovieInfoType> = ({
 
 const MovieDetails: React.FC = () => {
   const [imagePath, setimagePath] = useState<string>('');
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const movieDetailQuery = gql`
@@ -145,6 +153,7 @@ const MovieDetails: React.FC = () => {
       recommend (id: $id) @rest(type: "MovieMedia", path: "/movie/{args.id}/recommendations") {
         results {
           poster_path
+          id
         }
       }
     }
@@ -231,7 +240,7 @@ const MovieDetails: React.FC = () => {
                 {data.media.backdrops && (
                   <Box maxW="100%">
                     <Text fontSize="xl" fontWeight="bold" mb="8px">Media</Text>
-                    <Stack direction="row" spacing="0" overflowX="auto">
+                    <Stack direction="row" spacing="8px" overflowX="auto">
                       {data.media.backdrops.map((image: { file_path: string }, ind: number) => (
                         <Image src={imagePath + image.file_path} width="30%" key={`rec-${ind}`} />
                       ))}
@@ -246,11 +255,13 @@ const MovieDetails: React.FC = () => {
               Recommendations
             </Text>
             <Stack direction="row" spacing="15px" overflowX="auto">
-              {data.recommend.results.map((result: { poster_path: string }, ind: number) => (
+              {data.recommend.results.map((result: { poster_path: string; id: number }, ind: number) => (
                 <Image
+                  key={`rec-${ind}`}
+                  cursor="pointer"
                   src={imagePath + result.poster_path}
                   width={["30%", "30%", "20%", "15%"]}
-                  key={`rec-${ind}`}
+                  onClick={() => navigate('/' + result.id.toString())}
                 />
               ))}
             </Stack>

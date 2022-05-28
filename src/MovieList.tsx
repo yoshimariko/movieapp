@@ -53,7 +53,7 @@ const MovieList: React.FC = () => {
       ) : (
         <Stack>
           <Stack
-            alignItems="center"
+            alignItems={["center", "center", "initial"]}
             justifyContent="space-between"
             mb="25px"
           >
