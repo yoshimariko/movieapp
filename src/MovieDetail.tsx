@@ -200,7 +200,11 @@ const MovieDetails: React.FC = () => {
               w="80%"
             >
               <MovieImage
-                image={imagePath + data.details?.poster_path}
+                image={
+                  data.details?.poster_path
+                    ? imagePath + data.details?.poster_path
+                    : ImagePlaceHolder
+                }
                 id={id?.toString() || ''}
               />
               <Stack
@@ -257,28 +261,33 @@ const MovieDetails: React.FC = () => {
               </Stack>
             </Stack>
           </Stack>
-          <Stack pt="20px">
-            <Text fontSize={['xl', 'xl', '2xl']} fontWeight="bold" mb="20px">
-              Recommendations
-            </Text>
-            <Stack direction="row" spacing="15px" overflowX="auto">
-              {data.recommend.results.map(
-                (result: { poster_path: string; id: number }, ind: number) => (
-                  <Image
-                    key={`rec-${ind}`}
-                    cursor="pointer"
-                    src={
-                      result.poster_path
-                        ? imagePath + result.poster_path
-                        : ImagePlaceHolder
-                    }
-                    width={['30%', '30%', '20%', '15%']}
-                    onClick={() => navigate('/' + result.id.toString())}
-                  />
-                )
-              )}
+          {data.recommend.results.length > 0 && (
+            <Stack pt="20px">
+              <Text fontSize={['xl', 'xl', '2xl']} fontWeight="bold" mb="20px">
+                Recommendations
+              </Text>
+              <Stack direction="row" spacing="15px" overflowX="auto">
+                {data.recommend.results.map(
+                  (
+                    result: { poster_path: string; id: number },
+                    ind: number
+                  ) => (
+                    <Image
+                      key={`rec-${ind}`}
+                      cursor="pointer"
+                      src={
+                        result.poster_path
+                          ? imagePath + result.poster_path
+                          : ImagePlaceHolder
+                      }
+                      width={['30%', '30%', '20%', '15%']}
+                      onClick={() => navigate('/' + result.id.toString())}
+                    />
+                  )
+                )}
+              </Stack>
             </Stack>
-          </Stack>
+          )}
         </>
       )}
     </Stack>
